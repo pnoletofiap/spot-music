@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/usuarios/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/usuarios/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/usuarios",
+  "projects": {
+    "usuarios": {
+      "type": "application",
+      "root": "apps/usuarios",
+      "entryFile": "main",
+      "sourceRoot": "apps/usuarios/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/usuarios/tsconfig.app.json"
+      }
+    },
+    "musicas": {
+      "type": "application",
+      "root": "apps/musicas",
+      "entryFile": "main",
+      "sourceRoot": "apps/musicas/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/musicas/tsconfig.app.json"
+      }
+    },
+    "playlists": {
+      "type": "application",
+      "root": "apps/playlists",
+      "entryFile": "main",
+      "sourceRoot": "apps/playlists/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/playlists/tsconfig.app.json"
+      }
+    },
+    "shares": {
+      "type": "application",
+      "root": "apps/shares",
+      "entryFile": "main",
+      "sourceRoot": "apps/shares/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/shares/tsconfig.app.json"
+      }
+    },
+    "infra.database": {
+      "type": "library",
+      "root": "libs/infra.database",
+      "entryFile": "index",
+      "sourceRoot": "libs/infra.database/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/infra.database/tsconfig.lib.json"
+      }
+    },
+    "infra.auth": {
+      "type": "library",
+      "root": "libs/infra.auth",
+      "entryFile": "index",
+      "sourceRoot": "libs/infra.auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/infra.auth/tsconfig.lib.json"
+      }
+    },
+    "domain": {
+      "type": "library",
+      "root": "libs/domain",
+      "entryFile": "index",
+      "sourceRoot": "libs/domain/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/domain/tsconfig.lib.json"
+      }
+    },
+    "shared": {
+      "type": "library",
+      "root": "libs/shared",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
+      }
+    }
+  }
+}

@@ -1,0 +1,285 @@
+version: '3.9'
+services:
+  usuarios-database:
+    image: 'mysql:lts'
+    networks:
+      - databases-network
+    secrets:
+      - db-secret
+    environment:
+      TZ: America/Sao_Paulo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-secret
+    volumes:
+      - usuarios-data:/var/lib/mysql
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 15s
+      update_config:
+        parallelism: 1
+        delay: 15s
+        order: start-first
+        max_failure_ratio: 1
+        failure_action: pause
+        monitor: 30s
+  playlists-database:
+    image: 'mysql:lts'
+    networks:
+      - databases-network
+    secrets:
+      - db-secret
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-secret
+    volumes:
+      - playlists-data:/var/lib/mysql
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 15s
+      update_config:
+        parallelism: 1
+        delay: 15s
+        order: start-first
+        max_failure_ratio: 1
+        failure_action: pause
+        monitor: 30s
+  shares-database:
+    image: 'mysql:lts'
+    networks:
+      - databases-network
+    secrets:
+      - db-secret
+    environment:
+      TZ: America/Sao_Paulo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-secret
+    volumes:
+      - shares-data:/var/lib/mysql
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 15s
+      update_config:
+        parallelism: 1
+        delay: 15s
+        order: start-first
+        max_failure_ratio: 1
+        failure_action: pause
+        monitor: 30s
+  musicas-database:
+    image: 'mysql:lts'
+    networks:
+      - databases-network
+    secrets:
+      - db-secret
+    environment:
+      TZ: America/Sao_Paulo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-secret
+    volumes:
+      - musicas-data:/var/lib/mysql
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 15s
+      update_config:
+        parallelism: 1
+        delay: 15s
+        order: start-first
+        max_failure_ratio: 1
+        failure_action: pause
+        monitor: 30s
+  databases-admin:
+    image: phpmyadmin:latest'
+    networks:
+      - databases-network
+    secrets:
+      - db-admin-secret
+    environment:
+      TZ: America/Sao_Paulo
+      PMA_USER: admin@admin.com
+      PMA_PASSWORD_FILE: /run/secrets/db-admin-secret
+    volumes:
+      - db-admin-data:/var/lib/pgadmin
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 15s
+      update_config:
+        parallelism: 1
+        delay: 15s
+        order: start-first
+        max_failure_ratio: 1
+        failure_action: pause
+        monitor: 30s
+    ports:
+      - '8585:80/tcp'
+      - '8543:443/tcp'
+  web-app:
+    image: ghcr.io/pnoletofiap/web-app:latest
+    networks:
+      - services-network
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 15s
+      update_config:
+        parallelism: 1
+        delay: 15s
+        order: start-first
+        max_failure_ratio: 1
+        failure_action: pause
+        monitor: 30s
+  usuarios-service:
+    image: ghcr.io/pnoletofiap/usuarios-service:latest
+    depends_on:
+      - usuarios-db
+    networks:
+      - signoz-network
+      - databases-network
+      - services-network
+    secrets:
+      - usuarios-db-secret
+    environment:
+      TZ: America/Sao_Paulo
+      NODE_ENV: development
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 15s
+      update_config:
+        parallelism: 1
+        delay: 15s
+        order: start-first
+        max_failure_ratio: 1
+        failure_action: pause
+        monitor: 30s
+  playlists-service:
+    image: ghcr.io/pnoletofiap/playlists-service:latest
+    depends_on:
+      - playlists-db
+    networks:
+      - signoz-network
+      - databases-network
+      - services-network
+    secrets:
+      - products-database-secret
+      - refresh-token-secret
+      - token-secret
+    environment:
+      TZ: America/Sao_Paulo
+      NODE_ENV: development
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 15s
+      update_config:
+        parallelism: 1
+        delay: 15s
+        order: start-first
+        max_failure_ratio: 1
+        failure_action: pause
+        monitor: 30s
+  shares-service:
+    image: ghcr.io/pnoletofiap/shares-service:latest
+    depends_on:
+      - shares-db
+    networks:
+      - signoz-network
+      - databases-network
+      - services-network
+    secrets:
+      - shares-db-secret
+    environment:
+      TZ: America/Sao_Paulo
+      NODE_ENV: development
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 15s
+      update_config:
+        parallelism: 1
+        delay: 15s
+        order: start-first
+        max_failure_ratio: 1
+        failure_action: pause
+        monitor: 30s
+  musicas-service:
+    image: ghcr.io/pnoletofiap/musicas-service:latest
+    depends_on:
+      - musicas-db
+    networks:
+      - signoz-network
+      - databases-network
+      - services-network
+    secrets:
+      - musicas-db-secret
+    environment:
+      TZ: America/Sao_Paulo
+      NODE_ENV: development
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 15s
+      update_config:
+        parallelism: 1
+        delay: 15s
+        order: start-first
+        max_failure_ratio: 1
+        failure_action: pause
+        monitor: 30s
+networks:
+  services-network:
+    name: services-network
+  databases-network:
+    name: databases-network
+  signoz-network:
+    name: signoz_default
+    external: true
+volumes:
+  usuarios-data:
+  playlists-data:
+  shares-data:
+  musicas-data:
+  db-admin-data:
+secrets:
+  db-secret:
+    name: db-secret
+    external: true
+  db-admin-secret:
+    name: db-admin-secret
+    external: true
+  usuarios-db-secret:
+    name: usuarios-db-secret
+    external: true
+  playlists-db-secret:
+    name: playlists-db-secret
+    external: true
+  shares-db-secret:
+    name: shares-db-secret
+    external: true
+  musicas-db-secret:
+    name: musicas-db-secret
+    external: true
