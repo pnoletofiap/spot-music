@@ -149,7 +149,6 @@ services:
     depends_on:
       - usuarios-db
     networks:
-      - signoz-network
       - databases-network
       - services-network
     secrets:
@@ -175,7 +174,6 @@ services:
     depends_on:
       - playlists-db
     networks:
-      - signoz-network
       - databases-network
       - services-network
     secrets:
@@ -203,7 +201,6 @@ services:
     depends_on:
       - shares-db
     networks:
-      - signoz-network
       - databases-network
       - services-network
     secrets:
@@ -229,7 +226,6 @@ services:
     depends_on:
       - musicas-db
     networks:
-      - signoz-network
       - databases-network
       - services-network
     secrets:
@@ -255,9 +251,6 @@ networks:
     name: services-network
   databases-network:
     name: databases-network
-  signoz-network:
-    name: signoz_default
-    external: true
 volumes:
   usuarios-data:
   playlists-data:
