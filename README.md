@@ -1,5 +1,5 @@
 # Diagrama de cponponentes da solução
-## 1. Código plantUML do digrama de componentes da solução
+## 1. Código plantUML do diagrama de componentes da solução
 ```plantuml
 
 @startuml
